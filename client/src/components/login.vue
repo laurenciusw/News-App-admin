@@ -44,11 +44,12 @@
             </div>
 
             <div class="mb-3">
-              <button
+              <reuseableButton :title="(title = 'SIGN IN')"></reuseableButton>
+              <!-- <button
                 class="mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md"
               >
                 Sign in
-              </button>
+              </button> -->
               <button
                 class="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
               >
@@ -82,27 +83,12 @@
         />
       </div>
     </div>
-
-    <!-- Credit -->
-    <div class="mt-3 w-full">
-      <p class="text-center">
-        Made by
-        <a target="_blank" href="https://www.instagram.com/_inubayuaji/" class="text-purple-700"
-          >Inu Bayu Aji</a
-        >
-        and ispired by
-        <a
-          target="_blank"
-          href="https://dribbble.com/shots/17564792-Log-in-page-Untitled-UI"
-          class="text-purple-700"
-          >this</a
-        >.
-      </p>
-    </div>
   </div>
 </template>
 
 <script>
+import reuseableButton from './reuseableButton.vue'
+
 export default {
   data() {
     return {
@@ -119,6 +105,9 @@ export default {
     toRegister() {
       this.$emit('toRegister')
     }
+  },
+  components: {
+    reuseableButton
   }
 }
 </script>

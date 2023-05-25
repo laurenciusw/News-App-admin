@@ -66,18 +66,21 @@
             </div>
 
             <div class="mb-3">
-              <button
+              <reuseableButton :title="(title = 'SIGN UP')"></reuseableButton>
+              <!-- <button
                 class="mb-1.5 block w-full text-center text-white bg-purple-700 hover:bg-purple-900 px-2 py-1.5 rounded-md"
               >
                 Sign Up
-              </button>
+              </button> -->
             </div>
           </form>
 
           <!-- Footer -->
           <div class="text-center">
             <span class="text-xs text-gray-400 font-semibold">Already have account?</span>
-            <a href="#" class="text-xs font-semibold text-purple-700">Sign In</a>
+            <a @click.prevent="toLogin" href="#" class="text-xs font-semibold text-purple-700"
+              >Sign In</a
+            >
           </div>
         </div>
       </div>
@@ -93,27 +96,12 @@
         />
       </div>
     </div>
-
-    <!-- Credit -->
-    <div class="mt-3 w-full">
-      <p class="text-center">
-        Made by
-        <a target="_blank" href="https://www.instagram.com/_inubayuaji/" class="text-purple-700"
-          >Inu Bayu Aji</a
-        >
-        and ispired by
-        <a
-          target="_blank"
-          href="https://dribbble.com/shots/17564792-Log-in-page-Untitled-UI"
-          class="text-purple-700"
-          >this</a
-        >.
-      </p>
-    </div>
   </div>
 </template>
 
 <script>
+import reuseableButton from './reuseableButton.vue'
+
 export default {
   data() {
     return {
@@ -129,7 +117,13 @@ export default {
   methods: {
     doRegister() {
       this.$emit('handleRegister', this.dataInput)
+    },
+    toLogin() {
+      this.$emit('toLogin')
     }
+  },
+  components: {
+    reuseableButton
   }
 }
 </script>

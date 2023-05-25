@@ -78,6 +78,50 @@
         <div class="container mx-auto px-4 sm:px-8">
           <div class="py-8">
             <!-- table -->
+
+            <!-- dashboard -->
+            <div v-if="currentSection === 'dashboard' || currentSection === ''">
+              <dashboard :articles="articles" :categories="categories" />
+            </div>
+
+            <!-- article -->
+            <div v-if="currentSection == 'article'">
+              <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div class="my-2 flex sm:flex-row flex-col justify-end">
+                  <button
+                    @click.prevent="changeSection('articleForm')"
+                    class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-full"
+                  >
+                    Add New Article
+                  </button>
+                </div>
+              </div>
+              <articlesTable
+                :articles="articles"
+                @detailArtcile="detailArtcile"
+                @updateStatus="updateStatus"
+              />
+            </div>
+
+            <!-- category -->
+            <div v-if="currentSection === 'category'">
+              <categoriesTable :categories="categories" />
+            </div>
+
+            <!-- hisotry -->
+            <div v-if="currentSection === 'history'">
+              <historiesTable :histories="histories" />
+            </div>
+
+            <!-- articleForm -->
+            <div v-if="currentSection === 'articleForm'">
+              <articleForm
+                :categories="categories"
+                @addArticle="addArticle"
+                :article="article"
+                @updateArticle="updateArticle"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -86,14 +130,27 @@
 </template>
 
 <script>
+import articleForm from './articleForm.vue'
+import articlesTable from './articlesTable.vue'
+import categoriesTable from './categoriesTable.vue'
+import dashboard from './dashboard.vue'
+import historiesTable from './historiesTable.vue'
+
 export default {
+  props: ['articles', 'categories', 'histories', 'article'],
   data() {
     return {
       asideOpen: true,
       currentSection: ''
     }
   },
-  components: {},
+  components: {
+    articlesTable,
+    categoriesTable,
+    historiesTable,
+    articleForm,
+    dashboard
+  },
   methods: {
     changeSection(destination) {
       console.log(destination)
@@ -101,9 +158,33 @@ export default {
     },
     doLogout() {
       this.$emit('handleLogout')
+    },
+    doFetchArticle() {
+      this.$emit('handleFetchArticle')
+    },
+    doFetchCategory() {
+      this.$emit('handleFetchCategory')
+    },
+    doFetchHistory() {
+      this.$emit('handleFetchHistory')
+    },
+    addArticle(newArticle) {
+      console.log(newArticle)
+      this.$emit('handleAddArticle', newArticle)
+    },
+    detailArtcile(id) {
+      this.$emit('detailArtcile', id)
+    },
+    updateArticle(newArticle, id) {
+      this.$emit('updateArticle', newArticle, id)
+    },
+    updateStatus(id, status) {
+      this.$emit('updateStatus', id, status)
     }
   },
-  created() {}
+  created() {
+    this.doFetchArticle(), this.doFetchCategory(), this.doFetchHistory()
+  }
 }
 </script>
 

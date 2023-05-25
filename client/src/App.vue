@@ -1,8 +1,27 @@
 <template>
   <div>
     <login v-if="currentPage === 'login'" @handleLogin="handleLogin" @toRegister="toRegister" />
-    <register v-if="currentPage === 'register'" @handleRegister="handleRegister" />
-    <home v-if="currentPage === 'home'" @handleLogout="handleLogout" />
+    <register
+      v-if="currentPage === 'register'"
+      @handleRegister="handleRegister"
+      @toLogin="toLogin"
+    />
+    <home
+      v-if="currentPage === 'home'"
+      @handleLogout="handleLogout"
+      @handleFetchArticle="handleFetchArticle"
+      :articles="articles"
+      @handleFetchCategory="handleFetchCategory"
+      :categories="categories"
+      @handleFetchHistory="handleFetchHistory"
+      :histories="histories"
+      @handleAddArticle="handleAddArticle"
+      ref="home"
+      @detailArtcile="detailArtcile"
+      :article="article"
+      @updateArticle="updateArticle"
+      @updateStatus="updateStatus"
+    />
   </div>
 </template>
 
@@ -17,7 +36,11 @@ const baseUrl = 'http://localhost:3000'
 export default {
   data() {
     return {
-      currentPage: null
+      currentPage: null,
+      articles: [],
+      categories: [],
+      histories: [],
+      article: ''
     }
   },
   components: {
@@ -36,6 +59,11 @@ export default {
     //change page register
     toRegister() {
       this.currentPage = 'register'
+    },
+
+    //change page login
+    toLogin() {
+      this.currentPage = 'login'
     },
 
     // login
@@ -71,6 +99,125 @@ export default {
     handleLogout() {
       localStorage.clear()
       this.currentPage = 'login'
+    },
+
+    //fetch Article
+    async handleFetchArticle() {
+      try {
+        const { data } = await axios({
+          method: 'get',
+          url: `${baseUrl}/articles`,
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.articles = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    //fetch Category
+    async handleFetchCategory() {
+      try {
+        const { data } = await axios({
+          method: 'get',
+          url: `${baseUrl}/categories`,
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        this.categories = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    //fetch History
+    async handleFetchHistory() {
+      try {
+        const { data } = await axios({
+          method: 'get',
+          url: `${baseUrl}/histories`
+        })
+        this.histories = data
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // add article
+    async handleAddArticle(newArticle) {
+      console.log(newArticle)
+      try {
+        const { data } = await axios({
+          method: 'post',
+          url: `${baseUrl}/articles`,
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: newArticle
+        })
+        await this.handleFetchArticle()
+        await this.$refs.home.changeSection('article')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    //detail Article
+    async detailArtcile(id) {
+      try {
+        const { data } = await axios({
+          method: 'get',
+          url: `${baseUrl}/articles/${id}`,
+          headers: {
+            access_token: localStorage.access_token
+          }
+        })
+        console.log(data)
+        this.article = data
+        this.$refs.home.changeSection('articleForm')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // update article
+    async updateArticle(newArticle, id) {
+      console.log(id, 'dariapp')
+      try {
+        const { data } = await axios({
+          method: 'put',
+          url: `${baseUrl}/articles/${id}`,
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: newArticle
+        })
+        await this.handleFetchArticle()
+        await this.$refs.home.changeSection('article')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // update status
+    async updateStatus(id, status) {
+      console.log(id, status, 'diapp')
+      try {
+        const { data } = await axios({
+          method: 'patch',
+          url: `${baseUrl}/articles/${id}`,
+          headers: {
+            access_token: localStorage.access_token
+          },
+          data: { status }
+        })
+        await this.handleFetchArticle()
+        await this.$refs.home.changeSection('article')
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }
