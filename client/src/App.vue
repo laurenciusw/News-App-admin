@@ -1,6 +1,11 @@
 <template>
   <div>
-    <login v-if="currentPage === 'login'" @handleLogin="handleLogin" @toRegister="toRegister" />
+    <login
+      v-if="currentPage === 'login'"
+      @handleLogin="handleLogin"
+      @toRegister="toRegister"
+      @googlelogin="googlelogin"
+    />
     <register
       v-if="currentPage === 'register'"
       @handleRegister="handleRegister"
@@ -218,6 +223,21 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    //google login
+    async googlelogin(res) {
+      try {
+        const google_token = res.credential
+        const { data } = await axios({
+          method: 'post',
+          url: `${baseUrl}/users/google-login`,
+          headers: { google_token }
+        })
+
+        localStorage.access_token = data.access_token
+        this.currentPage = 'home'
+      } catch (error) {}
     }
   }
 }

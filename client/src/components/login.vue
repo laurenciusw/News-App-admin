@@ -50,15 +50,7 @@
               >
                 Sign in
               </button> -->
-              <button
-                class="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
-              >
-                <img
-                  class="w-5 mr-2"
-                  src="https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA"
-                />
-                Sign in with Google
-              </button>
+              <googlelogin @googlelogin="googlelogin" />
             </div>
           </form>
 
@@ -87,6 +79,8 @@
 </template>
 
 <script>
+import googlelogin from './googlelogin.vue'
+
 import reuseableButton from './reuseableButton.vue'
 
 export default {
@@ -104,10 +98,15 @@ export default {
     },
     toRegister() {
       this.$emit('toRegister')
+    },
+    googlelogin(data) {
+      console.log(data)
+      this.$emit('googlelogin', data)
     }
   },
   components: {
-    reuseableButton
+    reuseableButton,
+    googlelogin
   }
 }
 </script>
