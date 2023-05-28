@@ -82,7 +82,10 @@ export default {
         localStorage.access_token = data.access_token
         this.currentPage = 'home'
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
       }
     },
 
@@ -96,7 +99,10 @@ export default {
         })
         this.currentPage = 'login'
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
       }
     },
 
@@ -166,7 +172,10 @@ export default {
         await this.handleFetchArticle()
         await this.$refs.home.changeSection('article')
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
       }
     },
 
@@ -203,7 +212,10 @@ export default {
         await this.handleFetchArticle()
         await this.$refs.home.changeSection('article')
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
       }
     },
     // update status
