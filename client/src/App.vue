@@ -36,7 +36,7 @@ import login from './components/login.vue'
 import register from './components/register.vue'
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'https://wlhck.site'
 
 export default {
   data() {
@@ -170,6 +170,7 @@ export default {
           data: newArticle
         })
         await this.handleFetchArticle()
+        await this.handleFetchHistory()
         await this.$refs.home.changeSection('article')
       } catch (error) {
         Swal.fire({
@@ -210,6 +211,7 @@ export default {
           data: newArticle
         })
         await this.handleFetchArticle()
+        await this.handleFetchHistory()
         await this.$refs.home.changeSection('article')
       } catch (error) {
         Swal.fire({
@@ -231,9 +233,13 @@ export default {
           data: { status }
         })
         await this.handleFetchArticle()
+        await this.handleFetchHistory()
         await this.$refs.home.changeSection('article')
       } catch (error) {
-        console.log(error)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message
+        })
       }
     },
 
